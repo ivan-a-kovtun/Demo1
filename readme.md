@@ -12,4 +12,11 @@ Pins PA9 and PA10 (UART1 Tx and Rx) are connected to usb-uart adapter connected 
 
 The project is created using CMSIS library.
 
+## Build and upload
+
+For building you need arm-none-eabi-gcc and ~-gcc-as compilers.
+For uploading you can use st-flash utility.
+
+For building just write "make".
+For uploading using st-flash write "make upload".
 
