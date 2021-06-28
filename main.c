@@ -10,7 +10,9 @@
 #include "button.h"
 #include <string.h>
 
-const char bufStart[] = "\n\r>>>";
+const char bufOutString[] = "\n\r>>>";
+const char bufInString[] = "\n\r<<<";
+const char bufHelloString[] = "Hello, write a text and press a USER button.";
 
 char buffer[BUF_LEN];
 volatile uint16_t B1IsPressed = 0;
@@ -30,20 +32,26 @@ void main() {
 	NVIC_EnableIRQ (USART1_IRQn);
 	NVIC_EnableIRQ (EXTI15_10_IRQn);
 
-	strcpy (buffer, bufStart);
-	len = strlen (bufStart);
+	strcpy (buffer, bufOutString);
+	len = strlen (bufOutString);
+	strcpy (buffer+len, bufHelloString);
+	len += strlen (bufHelloString);
+	strcpy (buffer+len, bufInString);
+	len += strlen (bufInString);
 
 	startDmaTransmit (buffer, len);
 
 	while (1) {
 
 		if (dmaUartState == 2) {
-			len = strlen (bufStart);
+			len = strlen (bufOutString);
 			startDmaReceive (buffer + len, BUF_LEN - len);
 		}
 
 		if (B1IsPressed) {
 			B1IsPressed = 0;
+			strcpy (buffer+len, bufInString);
+			len += strlen (bufInString);
 			startDmaTransmit (buffer, len);
 		}
 
