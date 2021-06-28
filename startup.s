@@ -1,4 +1,4 @@
-/***** FILE: boot.s *****
+/***** FILE: startup.s *****
  * This file is a part of Demo1 project.
  * The file contains:
  * - interrupt vector table;
