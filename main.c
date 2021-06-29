@@ -13,6 +13,7 @@
 const char bufOutString[] = "\n\r>>>";
 const char bufInString[] = "\n\r<<<";
 const char bufHelloString[] = "Hello, write a text and press a USER button.";
+const char bufOverflowString[] = "\n\r>>>Buffer overflow.";
 
 char buffer[BUF_LEN];
 volatile uint16_t B1IsPressed = 0;
@@ -36,22 +37,26 @@ void main() {
 	len = strlen (bufOutString);
 	strcpy (buffer+len, bufHelloString);
 	len += strlen (bufHelloString);
-	strcpy (buffer+len, bufInString);
-	len += strlen (bufInString);
 
 	startDmaTransmit (buffer, len);
 
 	while (1) {
 
 		if (dmaUartState == 2) {
+			startDmaTransmit (bufInString, strlen(bufInString));
+			while (dmaUartState != 2);
 			len = strlen (bufOutString);
 			startDmaReceive (buffer + len, BUF_LEN - len);
 		}
 
+		if (dmaUartState == 3) {
+			startDmaTransmit (bufOverflowString, strlen(bufOverflowString));
+			while (dmaUartState != 2);
+			startDmaTransmit (buffer, BUF_LEN);
+		}
+
 		if (B1IsPressed) {
 			B1IsPressed = 0;
-			strcpy (buffer+len, bufInString);
-			len += strlen (bufInString);
 			startDmaTransmit (buffer, len);
 		}
 

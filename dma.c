@@ -67,6 +67,7 @@ void DMA1_CH4_IrqHandler () {
 
 void DMA1_CH5_IrqHandler () {
 
+	dmaUartState = 3;
 	DMA1_Channel5->CCR &= ~ DMA_CCR5_EN;
 	DMA1->IFCR = DMA_IFCR_CTCIF5;
 
