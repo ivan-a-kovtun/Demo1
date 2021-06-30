@@ -23,8 +23,9 @@
 #include "stm32f10x.h"
 #include "dma.h"
 #include "uart.h"
+#include "main.h"
 
-extern volatile uint32_t dmaUartState;
+extern volatile DmaUartState_t dmaUartState;
 
 void configDma () {
 
@@ -41,7 +42,7 @@ void configDma () {
 
 void startDmaTransmit (char *text, uint16_t textLength) {
 
-	dmaUartState = 0;
+	dmaUartState = dmaTransmitsBufferToUart;
 	uartSetTransmitterOnlyMode (USART1);
 	startDmaUart1Tx (text, textLength);
 
@@ -49,7 +50,7 @@ void startDmaTransmit (char *text, uint16_t textLength) {
 
 void startDmaReceive (char *startPoint, uint16_t maxLength) {
 
-	dmaUartState = 1;
+	dmaUartState = dmaTransmitsFromUartToBuffer;
 	uartSetRecieverOnlyMode (USART1);
 	startDmaUart1Rx (startPoint, maxLength);
 
@@ -60,6 +61,7 @@ void startDmaReceive (char *startPoint, uint16_t maxLength) {
 
 void DMA1_CH4_IrqHandler () {
 
+	dmaUartState = dmaFinishedBufferToUartTransmission;
 	DMA1_Channel4->CCR &= ~ DMA_CCR4_EN;
 	DMA1->IFCR = DMA_IFCR_CTCIF4;
 
@@ -67,7 +69,7 @@ void DMA1_CH4_IrqHandler () {
 
 void DMA1_CH5_IrqHandler () {
 
-	dmaUartState = 3;
+	dmaUartState = bufferOverFlow;
 	DMA1_Channel5->CCR &= ~ DMA_CCR5_EN;
 	DMA1->IFCR = DMA_IFCR_CTCIF5;
 

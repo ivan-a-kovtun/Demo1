@@ -11,8 +11,9 @@
 
 #include "stm32f10x.h"
 #include "uart.h"
+#include "main.h"
 
-extern volatile uint32_t dmaUartState;
+extern volatile DmaUartState_t dmaUartState;
 
 void configUart1 () {
 
@@ -37,7 +38,7 @@ void configUart1 () {
 
 void USART1_IrqHandler () {
 
-	dmaUartState = 2;
+	dmaUartState = uartTransmissionComplete;
 	USART1->SR &= ~ USART_SR_TC;
 
 }

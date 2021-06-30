@@ -10,6 +10,7 @@
  */
 
 #include "button.h"
+#include "main.h"
 #include "stm32f10x.h"
 
 extern volatile uint16_t B1IsPressed;

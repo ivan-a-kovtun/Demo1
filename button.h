@@ -8,9 +8,6 @@
 #define DEMO1_BUTTON_H
 
 
-#define BUF_LEN 64
-
-
 // --- function declarations
 
 void configPortForButton ();

@@ -1,12 +1,13 @@
 /***** FILE: main.c *****
  *	This file is a part of Demo1 project.
- *	The file contains main function.
+ *	The file contains only main function.
  ************************
  */
 
 #include "stm32f10x.h"
 #include "dma.h"
 #include "uart.h"
+#include "main.h"
 #include "button.h"
 #include <string.h>
 
@@ -17,7 +18,7 @@ const char bufOverflowString[] = "\n\r>>>Buffer overflow.";
 
 char buffer[BUF_LEN];
 volatile uint16_t B1IsPressed = 0;
-volatile uint16_t dmaUartState;
+volatile DmaUartState_t dmaUartState;
 volatile uint16_t len;
 
 void main() {
@@ -42,16 +43,16 @@ void main() {
 
 	while (1) {
 
-		if (dmaUartState == 2) {
+		if (dmaUartState == uartTransmissionComplete) {
 			startDmaTransmit (bufInString, strlen(bufInString));
-			while (dmaUartState != 2);
+			while (dmaUartState != uartTransmissionComplete);
 			len = strlen (bufOutString);
 			startDmaReceive (buffer + len, BUF_LEN - len);
 		}
 
-		if (dmaUartState == 3) {
+		if (dmaUartState == bufferOverFlow) {
 			startDmaTransmit (bufOverflowString, strlen(bufOverflowString));
-			while (dmaUartState != 2);
+			while (dmaUartState != dmaFinishedBufferToUartTransmission);
 			startDmaTransmit (buffer, BUF_LEN);
 		}
 
