@@ -17,7 +17,6 @@ extern volatile DmaUartState_t dmaUartState;
 
 void configUart1 () {
 
-	// enable clock to uart1 and pins
 	RCC->APB2ENR |= RCC_APB2ENR_IOPAEN | RCC_APB2ENR_AFIOEN | RCC_APB2ENR_USART1EN;
 
 	// config controller pins to work as uart1 
@@ -28,7 +27,6 @@ void configUart1 () {
 	GPIOA->CRH |=   (GPIO_CRH_MODE9_1 | GPIO_CRH_CNF9_1);
 	GPIOA->CRH &= ~ (GPIO_CRH_MODE9_0 | GPIO_CRH_CNF9_0);
 
-	// config USART1
 	USART1->CR1 |= USART_CR1_UE;
 	USART1->BRR = UART1_BRR_VAL;
 	// for other settings defaulf values are Ok.

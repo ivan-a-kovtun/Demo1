@@ -29,13 +29,13 @@ extern volatile DmaUartState_t dmaUartState;
 
 void configDma () {
 
-	// enable clock to DMA
+
 	RCC->AHBENR |= RCC_AHBENR_DMA1EN;
 
-	// config DMA1_CH4 (uart1 Tx)
+	// DMA1_CH4 == uart1_Tx
 	DMA1_Channel4->CCR |= DMA_CCR4_DIR | DMA_CCR4_MINC | DMA_CCR4_TCIE;
 
-	// config DMA1_CH5 (uart1 Rx)
+	// DMA1_CH5 == uart1_Rx
 	DMA1_Channel5->CCR |= DMA_CCR5_MINC | DMA_CCR5_TCIE;
 
 }

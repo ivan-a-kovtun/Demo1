@@ -1,4 +1,7 @@
-
+/***** FILE: dma.c *****
+ *	This file is a part of Demo1 project.
+ ***********************
+ */
 
 #define BUF_LEN 64
 

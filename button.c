@@ -18,14 +18,12 @@ extern volatile uint16_t len;
 
 void configButtonPort () {
 
-	// enable port C clock, afio clock
 	RCC->APB2ENR |= RCC_APB2ENR_IOPCEN | RCC_APB2ENR_AFIOEN;
 
 	// PC13 to float input
 	GPIOC->CRH |= GPIO_CRH_CNF13_0;
 	GPIOC->CRH &= ~ (GPIO_CRH_CNF13_1 | GPIO_CRH_MODE13);
 
-	// config external interrupt controller
 	EXTI->EMR |= EXTI_EMR_MR13;
 	EXTI->IMR |= EXTI_IMR_MR13;
 	EXTI->RTSR |= EXTI_RTSR_TR13;
